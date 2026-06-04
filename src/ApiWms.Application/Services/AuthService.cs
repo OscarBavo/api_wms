@@ -18,23 +18,21 @@ public class AuthService : IAuthService
     {
         var sesion = await _authRepository.IniciarSesionAsync(request);
 
-        if (sesion == null || sesion.Resultado != 0)
+        if (sesion == null || sesion.Resultado != "OK")
         {
             return new LoginResponseDto
             {
                 Exito = false,
-                Mensaje = sesion?.Mensaje ?? "Error al iniciar sesión."
+                Mensaje = "Usuario o contraseña incorrectos."
             };
         }
 
         var datos = new DatosUsuarioDto
         {
-            IdUsuario = sesion.IdUsuario ?? 0,
-            Usuario = sesion.Usuario ?? string.Empty,
-            NombreCompleto = sesion.NombreCompleto ?? string.Empty,
-            Perfil = sesion.Perfil ?? string.Empty,
-            IdAlmacen = sesion.IdAlmacen,
-            Almacen = sesion.Almacen
+            IdUsuario = sesion.IdUsuario,
+            Nombre = sesion.Nombre,
+            IdPerfil = sesion.IdPerfil,
+            IdTipoUsuario = sesion.IDTIPOUSUARIO
         };
 
         var token = _jwtService.GenerarToken(datos);
@@ -42,7 +40,7 @@ public class AuthService : IAuthService
         return new LoginResponseDto
         {
             Exito = true,
-            Mensaje = sesion.Mensaje,
+            Mensaje = "Sesión iniciada correctamente.",
             Token = token,
             Datos = datos
         };

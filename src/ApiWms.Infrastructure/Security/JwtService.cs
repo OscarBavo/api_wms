@@ -32,11 +32,9 @@ public class JwtService : IJwtService
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, usuario.IdUsuario.ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Usuario),
-            new Claim("nombre", usuario.NombreCompleto),
-            new Claim("perfil", usuario.Perfil),
-            new Claim("idAlmacen", usuario.IdAlmacen?.ToString() ?? string.Empty),
-            new Claim("almacen", usuario.Almacen ?? string.Empty),
+            new Claim("nombre", usuario.Nombre),
+            new Claim("idPerfil", usuario.IdPerfil.ToString()),
+            new Claim("idTipoUsuario", usuario.IdTipoUsuario.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

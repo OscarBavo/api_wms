@@ -11,9 +11,7 @@ public class LoginResponseDto
 public class DatosUsuarioDto
 {
     public int IdUsuario { get; set; }
-    public string Usuario { get; set; } = string.Empty;
-    public string NombreCompleto { get; set; } = string.Empty;
-    public string Perfil { get; set; } = string.Empty;
-    public int? IdAlmacen { get; set; }
-    public string? Almacen { get; set; }
+    public string Nombre { get; set; } = string.Empty;
+    public int IdPerfil { get; set; }
+    public int IdTipoUsuario { get; set; }
 }
