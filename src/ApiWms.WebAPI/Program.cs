@@ -75,6 +75,21 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var error = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new
+        {
+            error = error?.Error.Message,
+            detalle = error?.Error.InnerException?.Message
+        });
+    });
+});
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
