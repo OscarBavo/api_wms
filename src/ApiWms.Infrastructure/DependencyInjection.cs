@@ -1,4 +1,5 @@
 using ApiWms.Application.Interfaces;
+using ApiWms.Application.Interfaces.Surtido;
 using ApiWms.Infrastructure.Persistence;
 using ApiWms.Infrastructure.Repositories;
 using ApiWms.Infrastructure.Security;
@@ -13,6 +14,7 @@ public static class DependencyInjection
         services.AddSingleton<SqlConnectionFactory>();
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<ISurtidoRepository, SurtidoRepository>();
         return services;
     }
 }
