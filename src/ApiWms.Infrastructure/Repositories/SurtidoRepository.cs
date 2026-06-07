@@ -21,7 +21,7 @@ public class SurtidoRepository : ISurtidoRepository
         using var connection = _connectionFactory.CreateConnection();
 
         var parameters = new DynamicParameters();
-        parameters.Add("@IdRecoleccion", idRecoleccion, DbType.Int32);
+        parameters.Add("@pIdRecoleccion", idRecoleccion, DbType.Int32);
         parameters.Add("@IdUsuario", idUsuario, DbType.Int32);
         parameters.Add("@vCodigoUbicacionesSurtidas", vCodigoUbicacionesSurtidas, DbType.String);
 
