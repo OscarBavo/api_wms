@@ -28,11 +28,27 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidateLifetime = true,
+        ValidateLifetime = false,
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
+        ClockSkew=TimeSpan.FromDays(15),
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+            {
+                context.Response.Headers.Append("Token-Expired", "true");
+            }else if (context.Exception.GetType() == typeof(SecurityTokenInvalidSignatureException))
+            {
+                context.Response.Headers.Append("Token-InvalidSignature", "true");
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 

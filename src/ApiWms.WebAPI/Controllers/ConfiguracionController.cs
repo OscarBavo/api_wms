@@ -17,7 +17,7 @@ public class ConfiguracionController : ControllerBase
         _configuracionService = configuracionService;
     }
 
-    [HttpGet("getConsultaConfiguracion")]
+    [HttpGet("ConsultaConfiguracion")]
     [ProducesResponseType(typeof(List<ConfiguracionItemDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetConsultaConfiguracion()
