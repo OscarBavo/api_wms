@@ -4,7 +4,6 @@ public class LoginResponseDto
 {
     public bool Exito { get; set; }
     public string Mensaje { get; set; } = string.Empty;
-    public string? Token { get; set; }
     public DatosUsuarioDto? Datos { get; set; }
 }
 

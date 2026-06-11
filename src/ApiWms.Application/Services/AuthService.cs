@@ -6,12 +6,10 @@ namespace ApiWms.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
-    private readonly IJwtService _jwtService;
 
-    public AuthService(IAuthRepository authRepository, IJwtService jwtService)
+    public AuthService(IAuthRepository authRepository)
     {
         _authRepository = authRepository;
-        _jwtService = jwtService;
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
@@ -35,13 +33,10 @@ public class AuthService : IAuthService
             IdTipoUsuario = sesion.IDTIPOUSUARIO
         };
 
-        var token = _jwtService.GenerarToken(datos);
-
         return new LoginResponseDto
         {
             Exito = true,
             Mensaje = "Sesión iniciada correctamente.",
-            Token = token,
             Datos = datos
         };
     }
