@@ -40,4 +40,14 @@ public class AuthService : IAuthService
             Datos = datos
         };
     }
+
+    public async Task<ConexionResponseDto> ValidarConexionAsync()
+    {
+        var conectado = await _authRepository.ValidarConexionAsync();
+
+        if (conectado)
+            return new ConexionResponseDto { Code = 200, Respuesta = "Conexión correcta", Estatus = "estable" };
+
+        return new ConexionResponseDto { Code = 401, Respuesta = "No se puede conectar", Estatus = "sin conexión" };
+    }
 }

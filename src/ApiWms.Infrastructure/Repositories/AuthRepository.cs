@@ -33,4 +33,18 @@ public class AuthRepository : IAuthRepository
             parameters,
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<bool> ValidarConexionAsync()
+    {
+        try
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            await connection.OpenAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

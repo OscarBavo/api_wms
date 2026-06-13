@@ -6,4 +6,5 @@ namespace ApiWms.Application.Interfaces;
 public interface IAuthRepository
 {
     Task<UsuarioSesion?> IniciarSesionAsync(LoginRequestDto request);
+    Task<bool> ValidarConexionAsync();
 }
