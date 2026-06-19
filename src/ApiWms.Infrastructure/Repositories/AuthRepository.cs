@@ -47,4 +47,19 @@ public class AuthRepository : IAuthRepository
             return false;
         }
     }
+
+    public async Task<SesionResultado?> AgregarSesionAsync(AgregarSesionRequestDto request)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pModulo", request.Modulo, DbType.String, size: 100);
+        parameters.Add("@pTipoAccion", request.TipoAccion, DbType.String, size: 100);
+        parameters.Add("@pIdUsuario", request.IdUsuario, DbType.Int32);
+
+        return await connection.QueryFirstOrDefaultAsync<SesionResultado>(
+            "spSesionAgregar",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+    }
 }

@@ -6,4 +6,5 @@ public interface IAuthService
 {
     Task<LoginResponseDto> LoginAsync(LoginRequestDto request);
     Task<ConexionResponseDto> ValidarConexionAsync();
+    Task<AgregarSesionResponseDto> AgregarSesionAsync(AgregarSesionRequestDto request);
 }

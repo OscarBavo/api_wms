@@ -34,6 +34,18 @@ public class AuthController : ControllerBase
         return Ok(resultado);
     }
 
+    /// <summary>Registra una acción de sesión del usuario en el sistema</summary>
+    [HttpPost("agregar-sesion")]
+    [ProducesResponseType(typeof(AgregarSesionResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> AgregarSesion([FromBody] AgregarSesionRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return Ok(new AgregarSesionResponseDto { Code = -1, Response = "no info", Status = 0 });
+
+        var resultado = await _authService.AgregarSesionAsync(request);
+        return Ok(resultado);
+    }
+
     /// <summary>Valida la conexión con la base de datos SQL</summary>
     [HttpGet("validar-conexion")]
     [ProducesResponseType(typeof(ConexionResponseDto), StatusCodes.Status200OK)]

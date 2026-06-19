@@ -7,4 +7,5 @@ public interface IAuthRepository
 {
     Task<UsuarioSesion?> IniciarSesionAsync(LoginRequestDto request);
     Task<bool> ValidarConexionAsync();
+    Task<SesionResultado?> AgregarSesionAsync(AgregarSesionRequestDto request);
 }

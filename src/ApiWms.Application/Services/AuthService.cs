@@ -50,4 +50,28 @@ public class AuthService : IAuthService
 
         return new ConexionResponseDto { Code = 401, Respuesta = "No se puede conectar", Estatus = "sin conexión" };
     }
+
+    public async Task<AgregarSesionResponseDto> AgregarSesionAsync(AgregarSesionRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Modulo) ||
+            string.IsNullOrWhiteSpace(request.TipoAccion) ||
+            request.IdUsuario is null)
+        {
+            return new AgregarSesionResponseDto { Code = -1, Response = "no info", Status = 0 };
+        }
+
+        try
+        {
+            var resultado = await _authRepository.AgregarSesionAsync(request);
+
+            if (resultado?.Resultado == "OK")
+                return new AgregarSesionResponseDto { Code = 1, Response = "Sesión modificada", Status = 200 };
+
+            return new AgregarSesionResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+        catch
+        {
+            return new AgregarSesionResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+    }
 }
