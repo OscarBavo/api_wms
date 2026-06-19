@@ -15,16 +15,16 @@ public class PermisosRepository : IPermisosRepository
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<List<PermisoItem>> ConsultarPermisosAsync(int idUsuario, int tipoModulo)
+    public async Task<List<PermisoItem>> ConsultarPermisosAsync(int idUsuario, string tipoModulo)
     {
         using var connection = _connectionFactory.CreateConnection();
 
         var parameters = new DynamicParameters();
         parameters.Add("@pIdUsuario", idUsuario, DbType.Int32);
-        parameters.Add("@pTipoModulo", tipoModulo, DbType.Int32);
+        parameters.Add("@pTipoModulo", tipoModulo, DbType.String);
 
         var result = await connection.QueryAsync<PermisoItem>(
-            "spPermisosConsultar",
+            "spPermisoConsultar",
             parameters,
             commandType: CommandType.StoredProcedure);
 

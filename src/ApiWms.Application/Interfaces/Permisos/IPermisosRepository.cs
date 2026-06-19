@@ -4,5 +4,5 @@ namespace ApiWms.Application.Interfaces.Permisos;
 
 public interface IPermisosRepository
 {
-    Task<List<PermisoItem>> ConsultarPermisosAsync(int idUsuario, int tipoModulo);
+    Task<List<PermisoItem>> ConsultarPermisosAsync(int idUsuario, string tipoModulo);
 }
