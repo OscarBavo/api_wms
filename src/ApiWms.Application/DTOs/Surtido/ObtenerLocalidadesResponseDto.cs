@@ -2,8 +2,9 @@ namespace ApiWms.Application.DTOs.Surtido;
 
 public class ObtenerLocalidadesResponseDto
 {
-    public bool Exito { get; set; }
-    public string Mensaje { get; set; } = string.Empty;
+    public int Code { get; set; }
+    public string Response { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
     public LocalidadDto? Localidad { get; set; }
     public List<DetallePedidoDto> Detalles { get; set; } = new();
 }

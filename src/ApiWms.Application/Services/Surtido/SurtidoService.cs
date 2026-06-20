@@ -23,15 +23,17 @@ public class SurtidoService : ISurtidoService
         {
             return new ObtenerLocalidadesResponseDto
             {
-                Exito = false,
-                Mensaje = "No se encontró información de localidad."
+                Code = -1,
+                Response = "No se encontró información de localidad.",
+                Status = "400"
             };
         }
 
         return new ObtenerLocalidadesResponseDto
         {
-            Exito = true,
-            Mensaje = "OK",
+            Code = 1,
+            Response = "OK",
+            Status = "200",
             Localidad = new LocalidadDto
             {
                 CodigoLocalidad = localidad.CODIGOLOCALIDAD,
