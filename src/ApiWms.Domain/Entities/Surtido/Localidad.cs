@@ -10,7 +10,7 @@ public class Localidad
     public int IDRECOLECCION { get; set; }
     public int SURTIDO { get; set; }
     public int IDTIPOLOCALIDAD { get; set; }
-    public int TipoLocalidad { get; set; }
+    public string TipoLocalidad { get; set; } = string.Empty;
     public float CantRecolectada { get; set; }
     public int TipoSurtido { get; set; }
     public bool Finalizar { get; set; }

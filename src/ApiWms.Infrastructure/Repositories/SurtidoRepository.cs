@@ -22,8 +22,8 @@ public class SurtidoRepository : ISurtidoRepository
 
         var parameters = new DynamicParameters();
         parameters.Add("@pIdRecoleccion", idRecoleccion, DbType.Int32);
-        parameters.Add("@IdUsuario", idUsuario, DbType.Int32);
-        parameters.Add("@vCodigoUbicacionesSurtidas", vCodigoUbicacionesSurtidas, DbType.String);
+        parameters.Add("@pIdUsuario", idUsuario, DbType.Int32);
+        parameters.Add("@pCodigoUbicacionesSurtidas", vCodigoUbicacionesSurtidas, DbType.String);
 
         using var multi = await connection.QueryMultipleAsync(
             "spRecoleccionObtenerLocalidad",
