@@ -35,4 +35,24 @@ public class SurtidoRepository : ISurtidoRepository
 
         return (localidad, detalles);
     }
+
+    public async Task<List<ArticuloRecoleccion>> ValidarArticuloAsync(
+        int pIdRecoleccion, int pIdOrdenEmbarque, int pIdLocalidad, int pIdUsuario, string pCodigoUbicacionesSurtidas)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pIdRecoleccion", pIdRecoleccion, DbType.Int32);
+        parameters.Add("@pIdOrdenEmbarque", pIdOrdenEmbarque, DbType.Int32);
+        parameters.Add("@pIdLocalidad", pIdLocalidad, DbType.Int32);
+        parameters.Add("@pIdUsuario", pIdUsuario, DbType.Int32);
+        parameters.Add("@pCodigoUbicacionesSurtidas", pCodigoUbicacionesSurtidas, DbType.String);
+
+        var result = await connection.QueryAsync<ArticuloRecoleccion>(
+            "spRecoleccionObtenerArticulos",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        return result.ToList();
+    }
 }

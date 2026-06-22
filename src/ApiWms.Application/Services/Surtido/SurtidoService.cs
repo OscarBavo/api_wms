@@ -64,4 +64,51 @@ public class SurtidoService : ISurtidoService
             }).ToList()
         };
     }
+
+    public async Task<ValidarArticuloResponseDto> ValidarArticuloAsync(ValidarArticuloRequestDto request)
+    {
+        if (request.pIdRecoleccion is null || request.pIdOrdenEmbarque is null ||
+            request.pIdLocalidad is null || request.pIdUsuario is null)
+        {
+            return new ValidarArticuloResponseDto { Code = -1, Response = "no info", Status = 0 };
+        }
+
+        try
+        {
+            var articulos = await _surtidoRepository.ValidarArticuloAsync(
+                request.pIdRecoleccion.Value,
+                request.pIdOrdenEmbarque.Value,
+                request.pIdLocalidad.Value,
+                request.pIdUsuario.Value,
+                request.pCodigoUbicacionesSurtidas);
+
+            return new ValidarArticuloResponseDto
+            {
+                Code = 1,
+                Response = "OK",
+                Status = 200,
+                RecoleccionDatos = articulos.Select(a => new ArticuloRecoleccionDto
+                {
+                    IdRecoleccion = a.IdRecoleccion,
+                    IdOrdenEmbarque = a.IdOrdenEmbarque,
+                    NumPedido = a.NumPedido,
+                    IdLocalidad = a.IdLocalidad,
+                    IdEstilo = a.IdEstilo,
+                    Articulo = a.Articulo,
+                    Descripcion = a.Descripcion,
+                    MultiploCaja = a.MultiploCaja,
+                    LeyendaSurtido = a.LeyendaSurtido,
+                    SinCodigoBarras = a.SinCodigoBarras,
+                    Lote = a.Lote,
+                    CantPresentacion = a.CantPresentacion,
+                    NombrePresentacion = a.NombrePresentacion,
+                    CantidadSurtir = a.CantidadSurtir
+                }).ToList()
+            };
+        }
+        catch
+        {
+            return new ValidarArticuloResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+    }
 }

@@ -15,6 +15,18 @@ public class SurtidoController : ControllerBase
         _surtidoService = surtidoService;
     }
 
+    /// <summary>Valida y obtiene artículos de recolección para surtido</summary>
+    [HttpPost("validar-articulo")]
+    [ProducesResponseType(typeof(ValidarArticuloResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ValidarArticulo([FromBody] ValidarArticuloRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return Ok(new ValidarArticuloResponseDto { Code = -1, Response = "no info", Status = 0 });
+
+        var resultado = await _surtidoService.ValidarArticuloAsync(request);
+        return Ok(resultado);
+    }
+
     /// <summary>Obtiene las localidades de recolección para surtido</summary>
     [HttpPost("obtener-localidades")]
     [ProducesResponseType(typeof(ObtenerLocalidadesResponseDto), StatusCodes.Status200OK)]
