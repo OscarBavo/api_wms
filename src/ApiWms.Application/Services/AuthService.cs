@@ -14,31 +14,43 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
     {
-        var sesion = await _authRepository.IniciarSesionAsync(request);
-
-        if (sesion == null || sesion.Resultado != "OK")
+        try
         {
+            var sesion = await _authRepository.IniciarSesionAsync(request);
+
+            if (sesion == null || sesion.Resultado != "OK")
+            {
+                return new LoginResponseDto
+                {
+                    Exito = false,
+                    Mensaje = "Usuario o contraseña incorrectos."
+                };
+            }
+
+            var datos = new DatosUsuarioDto
+            {
+                IdUsuario = sesion.IdUsuario,
+                Nombre = sesion.Nombre,
+                IdPerfil = sesion.IdPerfil,
+                IdTipoUsuario = sesion.IDTIPOUSUARIO
+            };
+
+            return new LoginResponseDto
+            {
+                Exito = true,
+                Mensaje = "Sesión iniciada correctamente.",
+                Datos = datos
+            };
+        }
+        catch (Exception ex)
+        {
+            // Aquí podrías loguear el error si tienes un sistema de logging
             return new LoginResponseDto
             {
                 Exito = false,
-                Mensaje = "Usuario o contraseña incorrectos."
+                Mensaje = $"Error al iniciar sesión: {ex.Message}"
             };
         }
-
-        var datos = new DatosUsuarioDto
-        {
-            IdUsuario = sesion.IdUsuario,
-            Nombre = sesion.Nombre,
-            IdPerfil = sesion.IdPerfil,
-            IdTipoUsuario = sesion.IDTIPOUSUARIO
-        };
-
-        return new LoginResponseDto
-        {
-            Exito = true,
-            Mensaje = "Sesión iniciada correctamente.",
-            Datos = datos
-        };
     }
 
     public async Task<ConexionResponseDto> ValidarConexionAsync()

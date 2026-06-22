@@ -57,6 +57,7 @@ public class SurtidoService : ISurtidoService
                 Clave = d.Clave,
                 Descripcion = d.Descripcion,
                 Cantidad = d.Cantidad,
+                CodigoLocalidad = d.CodigoLocalidad,
                 Unidad = d.Unidad,
                 Comentarios = d.Comentarios,
                 ConteoVerificacionStock = d.ConteoVerificacionStock

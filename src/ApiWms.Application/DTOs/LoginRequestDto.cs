@@ -21,4 +21,6 @@ public class LoginRequestDto
 
     [Required]
     public string VersionWms { get; set; } = string.Empty;
+    [Required]
+    public string compilacion { get; set; } = string.Empty;
 }

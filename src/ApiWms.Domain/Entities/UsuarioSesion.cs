@@ -6,5 +6,6 @@ public class UsuarioSesion
     public string Nombre { get; set; } = string.Empty;
     public int IdPerfil { get; set; }
     public int IDTIPOUSUARIO { get; set; }
+    public string Usuario { get; set; } = string.Empty;
     public string Resultado { get; set; } = string.Empty;
 }
