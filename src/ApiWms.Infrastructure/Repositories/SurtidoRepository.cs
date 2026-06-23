@@ -55,4 +55,25 @@ public class SurtidoRepository : ISurtidoRepository
 
         return result.ToList();
     }
+
+    public async Task<List<ArticuloSku>> ValidarArticuloSkuAsync(
+        int pIdRecoleccion, int pIdLocalidad, string pCodigoSku, int pIdUsuario, string pCodigoUbicacionesSurtidas, int pIdOrdenEmbarque)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pIdRecoleccion", pIdRecoleccion, DbType.Int32);
+        parameters.Add("@pIdLocalidad", pIdLocalidad, DbType.Int32);
+        parameters.Add("@pCodigoSku", pCodigoSku, DbType.String, size: 50);
+        parameters.Add("@pIdUsuario", pIdUsuario, DbType.Int32);
+        parameters.Add("@pCodigoUbicacionesSurtidas", pCodigoUbicacionesSurtidas, DbType.String);
+        parameters.Add("@pIdOrdenEmbarque", pIdOrdenEmbarque, DbType.Int32);
+
+        var result = await connection.QueryAsync<ArticuloSku>(
+            "spRecoleccionValidarSKU",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        return result.ToList();
+    }
 }

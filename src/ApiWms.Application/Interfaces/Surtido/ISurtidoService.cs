@@ -6,4 +6,5 @@ public interface ISurtidoService
 {
     Task<ObtenerLocalidadesResponseDto> ObtenerLocalidadesAsync(ObtenerLocalidadesRequestDto request);
     Task<ValidarArticuloResponseDto> ValidarArticuloAsync(ValidarArticuloRequestDto request);
+    Task<ValidarArticuloSkuResponseDto> ValidarArticuloSkuAsync(ValidarArticuloSkuRequestDto request);
 }

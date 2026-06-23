@@ -9,4 +9,7 @@ public interface ISurtidoRepository
 
     Task<List<ArticuloRecoleccion>> ValidarArticuloAsync(
         int pIdRecoleccion, int pIdOrdenEmbarque, int pIdLocalidad, int pIdUsuario, string pCodigoUbicacionesSurtidas);
+
+    Task<List<ArticuloSku>> ValidarArticuloSkuAsync(
+        int pIdRecoleccion, int pIdLocalidad, string pCodigoSku, int pIdUsuario, string pCodigoUbicacionesSurtidas, int pIdOrdenEmbarque);
 }
