@@ -5,7 +5,7 @@ public class ArticuloSku
     public string ClaveArticulo { get; set; } = string.Empty;
     public string Descripcion { get; set; } = string.Empty;
     public double Cantidad { get; set; }
-    public double Unidad { get; set; }
+    public String Unidad { get; set; }
     public double MultiploCaja { get; set; }
     public int IdOrdenEmbarque { get; set; }
     public string NumPedido { get; set; } = string.Empty;
@@ -19,7 +19,7 @@ public class ArticuloSku
     public bool ManejoSerie { get; set; }
     public string Lote { get; set; } = string.Empty;
     public string Presentacion { get; set; } = string.Empty;
-    public double MultPresentacion { get; set; }
+    public string MultPresentacion { get; set; } = string.Empty;
     public double Sugerencia { get; set; }
     public bool Consolidacion { get; set; }
 }

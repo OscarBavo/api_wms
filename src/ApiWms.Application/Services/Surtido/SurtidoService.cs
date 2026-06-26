@@ -106,9 +106,9 @@ public class SurtidoService : ISurtidoService
                 }).ToList()
             };
         }
-        catch
+        catch(Exception ex)
         {
-            return new ValidarArticuloResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+            return new ValidarArticuloResponseDto { Code = -1, Response = ex.Message, Status = 400 };
         }
     }
 
@@ -130,6 +130,15 @@ public class SurtidoService : ISurtidoService
                 request.pIdUsuario.Value,
                 request.pCodigoUbicacionesSurtidas,
                 request.pIdOrdenEmbarque.Value);
+
+            if (articulos[0].Descripcion == "SkuNoExiste") { 
+                return new ValidarArticuloSkuResponseDto
+                    {
+                        Code = -1,
+                        Response = "El SKU no existe en la localidad.",
+                        Status = 400
+                    };
+            }
 
             return new ValidarArticuloSkuResponseDto
             {
@@ -161,9 +170,9 @@ public class SurtidoService : ISurtidoService
                 }).ToList()
             };
         }
-        catch
+        catch(Exception ex)
         {
-            return new ValidarArticuloSkuResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+            return new ValidarArticuloSkuResponseDto { Code = -1, Response = ex.Message, Status = 400 };
         }
     }
 }
