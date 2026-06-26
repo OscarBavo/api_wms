@@ -51,4 +51,16 @@ public class SurtidoController : ControllerBase
         var resultado = await _surtidoService.ObtenerLocalidadesAsync(request);
         return Ok(resultado);
     }
+
+    /// <summary>Valida la ubicación de tránsito WMS en la recolección</summary>
+    [HttpPost("validar-ubicacion-transito-wms")]
+    [ProducesResponseType(typeof(ValidarUbicacionTransitoWmsResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ValidarUbicacionTransitoWms([FromBody] ValidarUbicacionTransitoWmsRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return Ok(new ValidarUbicacionTransitoWmsResponseDto { Code = -1, Response = "no info", Status = 0 });
+
+        var resultado = await _surtidoService.ValidarUbicacionTransitoWmsAsync(request);
+        return Ok(resultado);
+    }
 }

@@ -12,4 +12,8 @@ public interface ISurtidoRepository
 
     Task<List<ArticuloSku>> ValidarArticuloSkuAsync(
         int pIdRecoleccion, int pIdLocalidad, string pCodigoSku, int pIdUsuario, string pCodigoUbicacionesSurtidas, int pIdOrdenEmbarque);
+
+    Task<UbicacionTransitoResultado?> ValidarUbicacionTransitoWmsAsync(
+        string pClaveLocalidad, int pIdUsuario, string pIdRecoleccionDetalle,
+        string pModuloWMS, int pIdTipoUbicacion, int pIdIntercambio);
 }

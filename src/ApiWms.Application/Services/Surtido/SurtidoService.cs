@@ -175,4 +175,58 @@ public class SurtidoService : ISurtidoService
             return new ValidarArticuloSkuResponseDto { Code = -1, Response = ex.Message, Status = 400 };
         }
     }
+
+    public async Task<ValidarUbicacionTransitoWmsResponseDto> ValidarUbicacionTransitoWmsAsync(ValidarUbicacionTransitoWmsRequestDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.pClaveLocalidad) ||
+            request.pIdUsuario is null ||
+            string.IsNullOrWhiteSpace(request.pIdRecoleccionDetalle) ||
+            string.IsNullOrWhiteSpace(request.pModuloWMS) ||
+            request.pIdTipoUbicacion is null ||
+            request.pIdIntercambio is null)
+        {
+            return new ValidarUbicacionTransitoWmsResponseDto { Code = -1, Response = "no info", Status = 0 };
+        }
+
+        try
+        {
+            var resultado = await _surtidoRepository.ValidarUbicacionTransitoWmsAsync(
+                request.pClaveLocalidad,
+                request.pIdUsuario.Value,
+                request.pIdRecoleccionDetalle,
+                request.pModuloWMS,
+                request.pIdTipoUbicacion.Value,
+                request.pIdIntercambio.Value);
+
+            if (resultado == null)
+                return new ValidarUbicacionTransitoWmsResponseDto { Code = -1, Response = "no info", Status = 0 };
+
+            if (string.IsNullOrWhiteSpace(resultado.Mensaje) &&
+                resultado.Resultado == "ErrorTraspasoAgregarIntercambio")
+            {
+                return new ValidarUbicacionTransitoWmsResponseDto
+                {
+                    Code = -2,
+                    Response = "Error en validación",
+                    Status = 400
+                };
+            }
+
+            return new ValidarUbicacionTransitoWmsResponseDto
+            {
+                Code = 1,
+                Response = "OK",
+                Status = 200,
+                RespuestaIntercambio = new RespuestaIntercambioDto
+                {
+                    Resultado = resultado.Resultado,
+                    Mensaje = resultado.Mensaje
+                }
+            };
+        }
+        catch
+        {
+            return new ValidarUbicacionTransitoWmsResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+    }
 }

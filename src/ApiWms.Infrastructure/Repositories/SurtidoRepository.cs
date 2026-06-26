@@ -76,4 +76,37 @@ public class SurtidoRepository : ISurtidoRepository
 
         return result.ToList();
     }
+
+    public async Task<UbicacionTransitoResultado?> ValidarUbicacionTransitoWmsAsync(
+        string pClaveLocalidad, int pIdUsuario, string pIdRecoleccionDetalle,
+        string pModuloWMS, int pIdTipoUbicacion, int pIdIntercambio)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pClaveLocalidad", pClaveLocalidad, DbType.String);
+        parameters.Add("@pIdUsuario", pIdUsuario, DbType.Int32);
+        parameters.Add("@pIdRecoleccionDetalle", pIdRecoleccionDetalle, DbType.String);
+        parameters.Add("@pModuloWMS", pModuloWMS, DbType.String, size: 50);
+        parameters.Add("@pIdTipoUbicacion", pIdTipoUbicacion, DbType.Int32);
+        parameters.Add("@pIdIntercambio", pIdIntercambio, DbType.Int32);
+        parameters.Add("@pResultado", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
+        parameters.Add("@pMensaje", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
+
+        var result = await connection.QueryFirstOrDefaultAsync<UbicacionTransitoResultado>(
+            "spRecoleccionValidarUbicacionValidarWMS",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        if (result != null)
+            return result;
+
+        var resultadoOutput = parameters.Get<string?>("@pResultado") ?? string.Empty;
+        var mensajeOutput = parameters.Get<string?>("@pMensaje") ?? string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(resultadoOutput) || !string.IsNullOrWhiteSpace(mensajeOutput))
+            return new UbicacionTransitoResultado { Resultado = resultadoOutput, Mensaje = mensajeOutput };
+
+        return null;
+    }
 }
