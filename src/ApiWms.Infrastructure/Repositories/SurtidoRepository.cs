@@ -147,4 +147,26 @@ public class SurtidoRepository : ISurtidoRepository
 
         return null;
     }
+
+    public async Task<FinalizarTransitoLocalidadResultado?> FinalizarTransitoLocalidadAsync(FinalizarTransitoLocalidadRequestDto request)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pIdRecoleccion", request.IdRecoleccion, DbType.Int32);
+        parameters.Add("@pIdOrdenEmbarque", request.IdOrdenEmbarque, DbType.Int32);
+        parameters.Add("@pClaveLocalidadOrigen", request.ClaveLocalidadOrigen, DbType.String, size: 15);
+        parameters.Add("@pClaveLocalidadDestino", request.ClaveLocalidadDestino, DbType.String, size: 15);
+        parameters.Add("@pCodigoSKU", request.CodigoSKU, DbType.String, size: 50);
+        parameters.Add("@pCantidad", request.Cantidad?.ToString(), DbType.String, size: 100);
+        parameters.Add("@pIdUsuario", request.IdUsuario, DbType.Int32);
+        parameters.Add("@pLote", request.Lote, DbType.String, size: 36);
+        parameters.Add("@pSerie", request.Series, DbType.String);
+        parameters.Add("@pTipoSurtido", request.TipoSurtido, DbType.Int32);
+
+        return await connection.QueryFirstOrDefaultAsync<FinalizarTransitoLocalidadResultado>(
+            "spRecoleccionValidarUbicacionTransitoFinalizarMovimiento",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+    }
 }

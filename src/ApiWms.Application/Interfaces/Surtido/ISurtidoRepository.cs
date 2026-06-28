@@ -19,4 +19,5 @@ public interface ISurtidoRepository
         string pModuloWMS, int pIdTipoUbicacion, int pIdIntercambio);
 
     Task<TransitoLocalidadWmsResultado?> ValidarTransitoLocalidadWmsAsync(ValidarTransitoLocalidadWmsRequestDto request);
+    Task<FinalizarTransitoLocalidadResultado?> FinalizarTransitoLocalidadAsync(FinalizarTransitoLocalidadRequestDto request);
 }

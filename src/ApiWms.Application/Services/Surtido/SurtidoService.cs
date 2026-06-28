@@ -266,6 +266,63 @@ public class SurtidoService : ISurtidoService
         }
     }
 
+    public async Task<FinalizarTransitoLocalidadResponseDto> FinalizarTransitoLocalidadAsync(FinalizarTransitoLocalidadRequestDto request)
+    {
+        if (request.IdRecoleccion is null || request.IdOrdenEmbarque is null ||
+            string.IsNullOrWhiteSpace(request.ClaveLocalidadOrigen) ||
+            string.IsNullOrWhiteSpace(request.ClaveLocalidadDestino) ||
+            string.IsNullOrWhiteSpace(request.CodigoSKU) ||
+            request.Cantidad is null || request.IdUsuario is null)
+        {
+            return new FinalizarTransitoLocalidadResponseDto { Code = -1, Response = "no info", Status = 0 };
+        }
+
+        try
+        {
+            var resultado = await _surtidoRepository.FinalizarTransitoLocalidadAsync(request);
+
+            if (resultado == null)
+                return new FinalizarTransitoLocalidadResponseDto { Code = -1, Response = "no info", Status = 0 };
+
+            if (resultado.Validacion == "ZERO")
+                return new FinalizarTransitoLocalidadResponseDto
+                {
+                    Code = -710,
+                    Response = "La cantidad a surtir debe ser mayor a cero",
+                    Status = -11
+                };
+
+            var datos = new FinalizarTransitoLocalidadDatosDto
+            {
+                IdLocalidad = resultado.IdLocalidad,
+                CodigoLocalidad = resultado.CodigoLocalidad,
+                Cantidad = resultado.Cantidad,
+                Unidad = resultado.Unidad
+            };
+
+            if (resultado.Cantidad == 0)
+                return new FinalizarTransitoLocalidadResponseDto
+                {
+                    Code = 200,
+                    Response = $"Articulos surtidos en: {resultado.CodigoLocalidad}",
+                    Status = 0,
+                    Datos = datos
+                };
+
+            return new FinalizarTransitoLocalidadResponseDto
+            {
+                Code = 201,
+                Response = $"¿La ubicación: {resultado.CodigoLocalidad}, tiene {resultado.Cantidad} {resultado.Unidad}?",
+                Status = 1,
+                Datos = datos
+            };
+        }
+        catch
+        {
+            return new FinalizarTransitoLocalidadResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+    }
+
     public async Task<ValidarUbicacionTransitoWmsResponseDto> ValidarUbicacionTransitoWmsAsync(ValidarUbicacionTransitoWmsRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.pClaveLocalidad) ||

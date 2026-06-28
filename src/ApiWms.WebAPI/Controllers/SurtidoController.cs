@@ -75,4 +75,16 @@ public class SurtidoController : ControllerBase
         var resultado = await _surtidoService.ValidarTransitoLocalidadWmsAsync(request);
         return Ok(resultado);
     }
+
+    /// <summary>Finaliza el movimiento de tránsito de localidad en la recolección</summary>
+    [HttpPost("finalizar-transito-localidad")]
+    [ProducesResponseType(typeof(FinalizarTransitoLocalidadResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> FinalizarTransitoLocalidad([FromBody] FinalizarTransitoLocalidadRequestDto request)
+    {
+        if (!ModelState.IsValid)
+            return Ok(new FinalizarTransitoLocalidadResponseDto { Code = -1, Response = "no info", Status = 0 });
+
+        var resultado = await _surtidoService.FinalizarTransitoLocalidadAsync(request);
+        return Ok(resultado);
+    }
 }
