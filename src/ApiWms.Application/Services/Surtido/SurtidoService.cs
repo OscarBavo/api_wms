@@ -214,13 +214,13 @@ public class SurtidoService : ISurtidoService
                 "Consolidado" => new ValidarTransitoLocalidadWmsResponseDto
                 {
                     Code = -702,
-                    Response = "OK",
+                    Response = $"La Ubicación: {destino}, no es valida",
                     Status = -13
                 },
                 "Usuario" => new ValidarTransitoLocalidadWmsResponseDto
                 {
                     Code = -703,
-                    Response = "OK",
+                    Response = "Error por usuario",
                     Status = -13
                 },
                 "Cancelado" => new ValidarTransitoLocalidadWmsResponseDto
@@ -260,9 +260,9 @@ public class SurtidoService : ISurtidoService
                 }
             };
         }
-        catch
+        catch(Exception ex)
         {
-            return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+            return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = $"Error SP, {ex.Message})", Status = 400 };
         }
     }
 
