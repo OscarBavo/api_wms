@@ -34,9 +34,7 @@ public class ValidarTransitoLocalidadWmsRequestDto
 
     public string? Series { get; set; }
 
-    [Required(ErrorMessage = "moduloWMS es obligatorio.")]
-    [MaxLength(50, ErrorMessage = "moduloWMS no puede exceder 50 caracteres.")]
-    public string? ModuloWMS { get; set; }
+    public string ModuloWMS { get; set; } = "Surtido";
 
     public int? IdIntercambio { get; set; }
 

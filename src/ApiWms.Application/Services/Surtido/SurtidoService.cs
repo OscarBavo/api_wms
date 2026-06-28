@@ -182,14 +182,14 @@ public class SurtidoService : ISurtidoService
             string.IsNullOrWhiteSpace(request.ClaveLocalidadOrigen) ||
             string.IsNullOrWhiteSpace(request.ClaveLocalidadDestino) ||
             string.IsNullOrWhiteSpace(request.CodigoSKU) ||
-            request.Cantidad is null || request.IdUsuario is null ||
-            string.IsNullOrWhiteSpace(request.ModuloWMS))
+            request.Cantidad is null || request.IdUsuario is null)
         {
             return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = "no info", Status = 0 };
         }
 
         try
         {
+            request.ModuloWMS = "Surtido";
             var resultado = await _surtidoRepository.ValidarTransitoLocalidadWmsAsync(request);
 
             if (resultado == null)
