@@ -1,3 +1,4 @@
+using ApiWms.Application.DTOs.Surtido;
 using ApiWms.Domain.Entities.Surtido;
 
 namespace ApiWms.Application.Interfaces.Surtido;
@@ -16,4 +17,6 @@ public interface ISurtidoRepository
     Task<UbicacionTransitoResultado?> ValidarUbicacionTransitoWmsAsync(
         string pClaveLocalidad, int pIdUsuario, string pIdRecoleccionDetalle,
         string pModuloWMS, int pIdTipoUbicacion, int pIdIntercambio);
+
+    Task<TransitoLocalidadWmsResultado?> ValidarTransitoLocalidadWmsAsync(ValidarTransitoLocalidadWmsRequestDto request);
 }

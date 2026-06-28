@@ -1,3 +1,4 @@
+using ApiWms.Application.DTOs.Surtido;
 using ApiWms.Application.Interfaces.Surtido;
 using ApiWms.Domain.Entities.Surtido;
 using ApiWms.Infrastructure.Persistence;
@@ -106,6 +107,43 @@ public class SurtidoRepository : ISurtidoRepository
 
         if (!string.IsNullOrWhiteSpace(resultadoOutput) || !string.IsNullOrWhiteSpace(mensajeOutput))
             return new UbicacionTransitoResultado { Resultado = resultadoOutput, Mensaje = mensajeOutput };
+
+        return null;
+    }
+
+    public async Task<TransitoLocalidadWmsResultado?> ValidarTransitoLocalidadWmsAsync(ValidarTransitoLocalidadWmsRequestDto request)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+
+        var parameters = new DynamicParameters();
+        parameters.Add("@pIdRecoleccion", request.IdRecoleccion, DbType.Int32);
+        parameters.Add("@pIdOrdenEmbarque", request.IdOrdenEmbarque, DbType.Int32);
+        parameters.Add("@pClaveLocalidadOrigen", request.ClaveLocalidadOrigen, DbType.String, size: 15);
+        parameters.Add("@pClaveLocalidadDestino", request.ClaveLocalidadDestino, DbType.String, size: 15);
+        parameters.Add("@pCodigoSKU", request.CodigoSKU, DbType.String, size: 50);
+        parameters.Add("@pCantidad", request.Cantidad, DbType.Decimal);
+        parameters.Add("@pIdUsuario", request.IdUsuario, DbType.Int32);
+        parameters.Add("@pLote", request.Lote, DbType.String, size: 36);
+        parameters.Add("@pSerie", request.Series, DbType.String);
+        parameters.Add("@pModuloWMS", request.ModuloWMS, DbType.String, size: 50);
+        parameters.Add("@pIdIntercambio", request.IdIntercambio, DbType.Int32);
+        parameters.Add("@pTipoSurtido", request.TipoSurtido, DbType.Int32);
+        parameters.Add("@pResultado", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
+        parameters.Add("@pMensaje", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
+
+        var result = await connection.QueryFirstOrDefaultAsync<TransitoLocalidadWmsResultado>(
+            "spRecoleccionValidarUbicacionTransitoValidarWMS",
+            parameters,
+            commandType: CommandType.StoredProcedure);
+
+        if (result != null)
+            return result;
+
+        var resultadoOutput = parameters.Get<string?>("@pResultado") ?? string.Empty;
+        var mensajeOutput = parameters.Get<string?>("@pMensaje") ?? string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(resultadoOutput) || !string.IsNullOrWhiteSpace(mensajeOutput))
+            return new TransitoLocalidadWmsResultado { Resultado = resultadoOutput, Mensaje = mensajeOutput };
 
         return null;
     }

@@ -176,6 +176,96 @@ public class SurtidoService : ISurtidoService
         }
     }
 
+    public async Task<ValidarTransitoLocalidadWmsResponseDto> ValidarTransitoLocalidadWmsAsync(ValidarTransitoLocalidadWmsRequestDto request)
+    {
+        if (request.IdRecoleccion is null || request.IdOrdenEmbarque is null ||
+            string.IsNullOrWhiteSpace(request.ClaveLocalidadOrigen) ||
+            string.IsNullOrWhiteSpace(request.ClaveLocalidadDestino) ||
+            string.IsNullOrWhiteSpace(request.CodigoSKU) ||
+            request.Cantidad is null || request.IdUsuario is null ||
+            string.IsNullOrWhiteSpace(request.ModuloWMS))
+        {
+            return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = "no info", Status = 0 };
+        }
+
+        try
+        {
+            var resultado = await _surtidoRepository.ValidarTransitoLocalidadWmsAsync(request);
+
+            if (resultado == null)
+                return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = "no info", Status = 0 };
+
+            var destino = request.ClaveLocalidadDestino;
+
+            return resultado.Validacion switch
+            {
+                "PartidaCancelada" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -700,
+                    Response = "El surtido de este Artículo fue modificado, inícielo nuevamente",
+                    Status = -11
+                },
+                var v when v.StartsWith("Orden:") => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -701,
+                    Response = $"La Ubicación: {destino} de tránsito ya se encuentra relacionada a la orden: {resultado.Mensaje}",
+                    Status = -12
+                },
+                "Consolidado" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -702,
+                    Response = "OK",
+                    Status = -13
+                },
+                "Usuario" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -703,
+                    Response = "OK",
+                    Status = -13
+                },
+                "Cancelado" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -704,
+                    Response = $"La Ubicación: {destino} no es válida, tiene mercancía cancelada",
+                    Status = -14
+                },
+                "Empaque" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -706,
+                    Response = $"La Ubicación {destino} no es válida, tiene mercancía en Empaque",
+                    Status = -16
+                },
+                "VALORAGREGADO" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -707,
+                    Response = $"La Ubicación {destino} no es válida, tiene mercancía en Valor Agregado",
+                    Status = -17
+                },
+                "DestinoNoTransito" => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = -709,
+                    Response = $"La Ubicación: {destino}, No es de tránsito",
+                    Status = -19
+                },
+                _ => new ValidarTransitoLocalidadWmsResponseDto
+                {
+                    Code = 200,
+                    Response = "OK",
+                    Status = 0,
+                    Datos = new TransitoLocalidadDatosDto
+                    {
+                        Resultado = resultado.Resultado,
+                        Mensaje = resultado.Mensaje
+                    }
+                }
+            };
+        }
+        catch
+        {
+            return new ValidarTransitoLocalidadWmsResponseDto { Code = -1, Response = "Error SP", Status = 400 };
+        }
+    }
+
     public async Task<ValidarUbicacionTransitoWmsResponseDto> ValidarUbicacionTransitoWmsAsync(ValidarUbicacionTransitoWmsRequestDto request)
     {
         if (string.IsNullOrWhiteSpace(request.pClaveLocalidad) ||

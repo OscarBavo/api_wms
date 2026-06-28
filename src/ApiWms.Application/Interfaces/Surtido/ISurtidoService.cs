@@ -8,4 +8,5 @@ public interface ISurtidoService
     Task<ValidarArticuloResponseDto> ValidarArticuloAsync(ValidarArticuloRequestDto request);
     Task<ValidarArticuloSkuResponseDto> ValidarArticuloSkuAsync(ValidarArticuloSkuRequestDto request);
     Task<ValidarUbicacionTransitoWmsResponseDto> ValidarUbicacionTransitoWmsAsync(ValidarUbicacionTransitoWmsRequestDto request);
+    Task<ValidarTransitoLocalidadWmsResponseDto> ValidarTransitoLocalidadWmsAsync(ValidarTransitoLocalidadWmsRequestDto request);
 }
